@@ -7,7 +7,7 @@ def exportToIcal(courses, allCourseData):
     for c in courses:
         for i in allCourseData:
             for j in i:
-                if j.courseCode == c.courseCode:
+                if j.courseCode == c:
                     addSectionItems(j, newCal)
     #to_ical() returns bytes, so writing in binary is necessary 
     newIcs = open("coursePlan.ics", 'wb')
