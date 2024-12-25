@@ -18,12 +18,16 @@ def getCoursesName(courses):
         newCourses.append(reverseString(sectionAndName[1]))
     return newCourses
 
-def validateCourses(courseList, allCourseData):
+def validateCourses(courses):
+    courseList = parseCourses(courses)
+    with open('outputW25NoProfNoRooms.json', 'r') as file:
+        data = json.load(file)
+    
     for i in courseList:
         valid = False
-        for j in allCourseData:
-            for k in j:
-                if k.courseCode == i:
+        for key in data:
+            for j in data[key]['Sections']:
+                if j['id'] == i:
                     valid = True
         if valid == False:
             return False
@@ -37,10 +41,10 @@ def index():
     courses = request.form.get("courses", "")
     result = ""
     if request.method == "POST":
-        courseList = parseCourses(courses)
-        courseNames = getCoursesName(courseList)
-        allCourseData = initData(courseNames)    
-        if validateCourses(courseList, allCourseData):
+        if validateCourses(courses):
+            courseList = parseCourses(courses)
+            courseNames = getCoursesName(courseList)
+            allCourseData = initData(courseNames)    
             exportToIcal(courseList, allCourseData)
             result = "successful"
             return send_file("coursePlan.ics", as_attachment=True)
