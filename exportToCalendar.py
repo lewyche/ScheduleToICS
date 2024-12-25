@@ -2,6 +2,8 @@ from icalendar import Calendar, Event, vDatetime
 from datetime import datetime
 import zoneinfo
 
+#Code from https://github.com/AlphaCloudX/Schedule-Optimizer
+
 def exportToIcal(courses, allCourseData):
     newCal = Calendar()
     for c in courses:

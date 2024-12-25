@@ -2,49 +2,9 @@ import itertools
 import json
 
 from CourseUtil import ScheduleItem, CourseSection, CoursePlanner
-from sortingMethods import *
-from exportToCalendar import exportToIcal
 
-# Input and data loading logic
-# Use the list instead of retyping everything
-usePredefinedList = True
-#course_codes = ["CIS*2750", "CIS*3110", "CIS*3190", "CIS*3490", "MGMT*2150"]
+#Code from https://github.com/AlphaCloudX/Schedule-Optimizer
 
-# How to calculate First Class Of Day?
-# HH : MM
-# (HH * 60) + MM
-# For Example:
-# HH = 10 | which is 10am
-# MM = 30 | 30min after 10am
-# We Do (10 * 60) + 30
-# HH = 13 | 1pm
-# HH = 0 | just 1pm
-# We Do (13 * 60) + 0
-# LEAVE TO 0 FOR NOW IF YOU DO NOT WANT TO USE THIS PARAMETER
-earliestAtSchool = (11 * 60) + 0
-
-# Calculate Last Class Of Day
-latestAtSchool = (0 * 60) + 00
-
-# Sort by the avg start time of the first class
-# True will sort the avg start time by low to high
-sortByAvgStartTime = True
-# If this is set to true it will sort by the latest class time
-sortByLatestTime = False
-
-# remove this for now since it's probably easier to hardcode the values
-# earliestAtSchool = (10 * 60) + 30  # 10:30
-# earliestAtSchool = 1
-#
-# if not usePredefinedList:
-#     while True:
-#         course_code = input("Enter course code (or type 'done' to finish): ").upper().strip()
-#         if course_code.lower() == 'done':
-#             break
-#         course_codes.append(course_code)
-#
-# earliestAtSchool *= int(input("Enter The Earliest Hour You Want To Be At School 24hr format:")) * 60
-# earliestAtSchool += int(input("Enter The Earliest Minute You Want To Be At School 24hr format:"))
 def initData(courses):
     course_codes = courses
     # Load the JSON file into a Python dictionary
@@ -88,25 +48,5 @@ def initData(courses):
                 allCourseData[-1].append(newSection)
         else:
             pass
-            #print(f"Course code {course_code} not found.")
-
-    # Pass the course data into the CoursePlanner and print schedules
-    #validCombination = CoursePlanner(allCourseData).nonOverlapped()
-
-    # print(f"There are {len(validCombination)} valid combinations. Would You Like To View This Combination?")
-    # CoursePlanner(allCourseData, earliestAtSchool).print_all_schedules()
-    #validCombination = filterByEarliestAtSchool(validCombination, earliestAtSchool)
-    #validCombination = filterByLatestAtSchool(validCombination, latestAtSchool)
-    #validCombination, sortedTimeIndices1, times1 = filterByTotalMinTimeBetweenClasses(validCombination)
-
+            print(f"Course code {course_code} not found.")
     return allCourseData
-
-# Uncomment this code to draw the schedules out:
-
-
-# Regular print
-# for i in validCombination:
-#     for c in i:
-#         print(c.courseCode)
-#
-#     print("\n\n")

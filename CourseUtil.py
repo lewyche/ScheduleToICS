@@ -1,5 +1,6 @@
 import itertools
 
+#Code from https://github.com/AlphaCloudX/Schedule-Optimizer
 
 class ScheduleItem:
     """

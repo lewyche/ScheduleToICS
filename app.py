@@ -1,5 +1,5 @@
-import itertools
 import json
+import re
 from flask import Flask, render_template, request, send_file
 
 from coursePlanner import initData
@@ -10,14 +10,17 @@ app = Flask(__name__)
 def reverseString(str):
     return str[::-1]
 
+#ex: get CIS*2250 from CIS*2250*0102
 def getCoursesName(courses):
     newCourses = []
     for i in courses:
         newCourse = reverseString(i)
+        #sectionAndName: [2010,0522*SIC]
         sectionAndName = newCourse.split('*', 1)
         newCourses.append(reverseString(sectionAndName[1]))
     return newCourses
 
+#ensure that user entered courses are present in the json file
 def validateCourses(courses):
     courseList = parseCourses(courses)
     with open('outputW25NoProfNoRooms.json', 'r') as file:
@@ -34,7 +37,7 @@ def validateCourses(courses):
     return True
 
 def parseCourses(courses):
-    return courses.split(" ")
+    return re.split(r'[ ,!]+', courses)
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -49,7 +52,7 @@ def index():
             result = "successful"
             return send_file("coursePlan.ics", as_attachment=True)
         else:
-            result = "try again"
+            result = "Input invalid, did you forget to include the section number?"
     return render_template("index.html", result=result)
 
 
