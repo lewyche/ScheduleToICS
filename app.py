@@ -1,6 +1,6 @@
 import itertools
 import json
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_file
 
 from coursePlanner import initData
 from exportToCalendar import exportToIcal
@@ -36,13 +36,14 @@ def parseCourses(courses):
 def index():
     courses = request.form.get("courses", "")
     result = ""
-    courseList = parseCourses(courses)
-    courseNames = getCoursesName(courseList)
-    allCourseData = initData(courseNames)
     if request.method == "POST":
+        courseList = parseCourses(courses)
+        courseNames = getCoursesName(courseList)
+        allCourseData = initData(courseNames)    
         if validateCourses(courseList, allCourseData):
             exportToIcal(courseList, allCourseData)
             result = "successful"
+            return send_file("coursePlan.ics", as_attachment=True)
         else:
             result = "try again"
     return render_template("index.html", result=result)
