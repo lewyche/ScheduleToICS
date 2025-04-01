@@ -7,7 +7,10 @@ Source code for the website that allows you to import your course schedule into 
 
 ## Technologies used
 - Flask
+    - pip install Flask
 - ICalendar (python [library](https://pypi.org/project/icalendar/))
+    - pip install icalendar
+
 
 ## Special thanks to @AlphaCloudX
 [https://github.com/AlphaCloudX/Schedule-Optimizer](https://github.com/AlphaCloudX/Schedule-Optimizer)
