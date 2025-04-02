@@ -56,3 +56,6 @@ def index():
     return render_template("index.html", result=result)
 
 
+@app.route("/finder")
+def finder():
+    return render_template("finder.html")
