@@ -3,7 +3,7 @@
 Source code for the website that allows you to import your course schedule into a calendar application of your choice. 
 
 ## Link
-[lewyche.pythonanywhere.com](lewyche.pythonanywhere.com)
+[lewyche.pythonanywhere.com](https://lewyche.pythonanywhere.com)
 
 ## Technologies used
 - Flask
