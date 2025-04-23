@@ -90,6 +90,17 @@ def scoreRooms(rooms, givenTime):
         for i in rooms:
             scoreRoom(room=i, weekday=weekday, givenTime=time)
 
+def sortByBuilding(rooms, building):
+    newRooms = []
+    for room in rooms:
+        roomBuilding = room.name.split()
+        if len(roomBuilding) > 0 and roomBuilding[0] == building:
+            newRooms.append(room)
+    return newRooms
+
+def sortRooms(rooms):
+    rooms.sort(key=lambda x: x.score, reverse=True)
+    
 def main():
     data = load_data('outputW25.json')
     rooms = process_data(data)
@@ -99,15 +110,14 @@ def main():
     scoreRooms(rooms, datetime.datetime.now())
 
     for room in rooms:
-        if room.score > 0:
-            print(f"Room: {room.name}")
-            print(f"Score according to current time: {room.score}")
+        print(f"Room: {room.name}")
+        print(f"Score according to current time: {room.score}")
 
-            for event in room.events:
-                print(f"  Course: {event['course']}, Section: {event['section_id']}, Type: {event['type']}")
-                print(f"    Time: {event['start']}-{event['end']}, Days: {event['dates']}")
-                print(index)
-                index += 1
+        # for event in room.events:
+        #     print(f"  Course: {event['course']}, Section: {event['section_id']}, Type: {event['type']}")
+        #     print(f"    Time: {event['start']}-{event['end']}, Days: {event['dates']}")
+        #     print(index)
+        #     index += 1
 
 if __name__ == "__main__":
     main()

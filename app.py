@@ -56,6 +56,12 @@ def index():
     return render_template("index.html", result=result)
 
 
-@app.route("/finder")
+@app.route("/finder", methods=["GET", "POST"])
 def finder():
-    return render_template("finder.html")
+    time = request.form.get("time", "")
+    building = request.form.get("building", "")
+    result = ""
+    if request.method == "POST":
+        print(time)
+        print(building)
+    return render_template("finder.html", result=result)
