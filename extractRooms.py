@@ -1,10 +1,11 @@
 import json
-import re
+import datetime
 
 class Room:
     def __init__(self, name):
         self.name = name
         self.events = []
+    score = -1
 
 def load_data(filename):
     with open(filename, 'r') as f:
@@ -17,7 +18,7 @@ def process_data(data):
         sections = course_info.get("Sections", [])
         for section in sections:
             section_id = section.get("id")
-            for activity_type in ["LEC", "SEM", "LAB"]:
+            for activity_type in ["LEC","LAB","SEM"]:   #Rooms for Labs and Seminars are excluded, to add them just add "LAB" and "SEM"
                 activity = section.get(activity_type)
                 if activity:
                     location = activity.get("location", "")
@@ -44,15 +45,69 @@ def process_data(data):
                     rooms[room_name].events.append(event)
     return list(rooms.values())
 
+def get_day_abbrev(weekday):
+    days = ["M", "T", "W", "Th", "F", "S", "Su"]
+    return days[weekday]
+
+#Rooms are scored based on the amount of minutes until the next event
+def scoreRoom(room, weekday, givenTime):
+    foundSchedule = False
+    maxScore = 1440     #number of minutes in a day
+
+    for i in room.events:
+        if weekday in i['dates']:
+            #is event occuring during giventime
+            if i['start'] <= givenTime <= i['end']:
+                foundSchedule = True
+            elif i['end'] <= givenTime: #event has already occured
+                foundSchedule = True
+            elif givenTime < i['start']: #event has yet to occur
+                newScore = i['start'] - givenTime
+                if room.score != -1:    #rooms should be scored by nearest occuring event
+                    if newScore < room.score:   #if room has been scored by event occuring later
+                        room.score = newScore
+                        foundSchedule = True
+
+                else:
+                    room.score = newScore
+                    foundSchedule = True
+
+
+    if foundSchedule == False:   #No events occuring during this weekday
+        room.score = maxScore
+
+
+def scoreRooms(rooms, givenTime):
+    if not givenTime: #time not given
+        currtime = datetime.datetime.now()
+        time = currtime.hour * 60 + currtime.minute
+        weekday = get_day_abbrev(givenTime.weekday())
+        for i in rooms:
+            scoreRoom(room=i, weekday=weekday, givenTime=time)
+    else:   
+        time = givenTime.hour * 60 + givenTime.minute
+        weekday = get_day_abbrev(givenTime.weekday())
+        for i in rooms:
+            scoreRoom(room=i, weekday=weekday, givenTime=time)
+
 def main():
     data = load_data('outputW25.json')
     rooms = process_data(data)
     # Example usage: Print rooms and their events
+    index = 0
+
+    scoreRooms(rooms, datetime.datetime.now())
+
     for room in rooms:
-        print(f"Room: {room.name}")
-        for event in room.events:
-            print(f"  Course: {event['course']}, Section: {event['section_id']}, Type: {event['type']}")
-            print(f"    Time: {event['start']}-{event['end']}, Days: {event['dates']}")
+        if room.score > 0:
+            print(f"Room: {room.name}")
+            print(f"Score according to current time: {room.score}")
+
+            for event in room.events:
+                print(f"  Course: {event['course']}, Section: {event['section_id']}, Type: {event['type']}")
+                print(f"    Time: {event['start']}-{event['end']}, Days: {event['dates']}")
+                print(index)
+                index += 1
 
 if __name__ == "__main__":
     main()
