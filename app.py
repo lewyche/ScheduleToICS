@@ -5,6 +5,8 @@ from flask import Flask, render_template, request, send_file
 from coursePlanner import initData
 from exportToCalendar import exportToIcal
 
+from extractRooms import getRooms, sortByBuilding
+
 app = Flask(__name__)
 
 def reverseString(str):
@@ -55,13 +57,30 @@ def index():
             result = "Input invalid, did you forget to include the section number?"
     return render_template("index.html", result=result)
 
+def fillCard(room):
+    card = f"""<div class='room'>
+        <h2>{room.name}</h2>
+        <p>Minutes until next event: {room.score}</p>
+        </div>"""
+    return card
+
+
+#use room data to fill html cards
+def getHtmlRooms(rooms):
+    htmlRooms = []
+    for i in rooms:
+        htmlRooms.append(fillCard(i))
+    return htmlRooms
+
 
 @app.route("/finder", methods=["GET", "POST"])
 def finder():
     time = request.form.get("time", "")
     building = request.form.get("building", "")
-    result = ""
+    rooms = getRooms()
+    htmlRooms = getHtmlRooms(rooms)
+    print(htmlRooms)
     if request.method == "POST":
         print(time)
         print(building)
-    return render_template("finder.html", result=result)
+    return render_template("finder.html", htmlRooms=htmlRooms)

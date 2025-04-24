@@ -101,17 +101,21 @@ def sortByBuilding(rooms, building):
 def sortRooms(rooms):
     rooms.sort(key=lambda x: x.score, reverse=True)
     
-def main():
+def getRooms():
     data = load_data('outputW25.json')
     rooms = process_data(data)
-    # Example usage: Print rooms and their events
-    index = 0
 
     scoreRooms(rooms, datetime.datetime.now())
+    sortRooms(rooms)
 
-    for room in rooms:
-        print(f"Room: {room.name}")
-        print(f"Score according to current time: {room.score}")
+    return rooms
+
+
+# def main():
+
+#     for room in rooms:
+#         print(f"Room: {room.name}")
+        #print(f"Score according to current time: {room.score}")
 
         # for event in room.events:
         #     print(f"  Course: {event['course']}, Section: {event['section_id']}, Type: {event['type']}")
@@ -119,5 +123,12 @@ def main():
         #     print(index)
         #     index += 1
 
-if __name__ == "__main__":
-    main()
+    # buildings = []
+    # for i in rooms:
+    #     building = i.name.split()
+    #     if len(building) > 0 and building[0] not in buildings:
+    #         buildings.append(building[0])
+    # print(buildings) 
+
+# if __name__ == "__main__":
+#     main()
