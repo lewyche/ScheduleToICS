@@ -55,20 +55,19 @@ def scoreRoom(room, weekday, givenTime):
     room.score = -1
     maxScore = 1440     #number of minutes in a day
 
-    if room.name == "ROZH 102":    
-        print(weekday)
-        for i in room.events:
-            print(i['dates'])
-        print(room.score)
-
+    #search through all events that occur in this room
     for i in room.events:
         if weekday in i['dates']:
+
             foundSchedule = True
+            
+            #Code is probably redudant but useful for understanding=====
             #is event occuring during giventime
             if i['start'] <= givenTime <= i['end']:
                 foundSchedule = True
             elif i['end'] <= givenTime: #event has already occured
                 foundSchedule = True
+            #=======================================================
             elif givenTime < i['start']: #event has yet to occur
                 newScore = i['start'] - givenTime
                 if room.score != -1:    #rooms should be scored by nearest occuring event
@@ -77,11 +76,7 @@ def scoreRoom(room, weekday, givenTime):
                 elif room.score == -1:
                     room.score = newScore
                 foundSchedule = True   
-            if room.name == "ROZH 102":
-                print(room.score)
     if foundSchedule == False:   #No events occuring during this weekday
-        if room.name == "ROZH 102":
-            print("did not find")
         room.score = maxScore
 
 def scoreRoomsCurrTime(rooms):
@@ -105,16 +100,13 @@ def scoreRoomsGivenTime(rooms, weekday, hour, minutes):
         setHour = currtime.hour
         setMinutes = currtime.minute
 
-    print(weekday)
-    print(hour)
-    print(minutes)
-
     time = setHour * 60 + setMinutes
 
     for i in rooms:
         scoreRoom(room=i, weekday=setWeekday, givenTime=time)
 
-def sortByBuilding(rooms, building):
+#Remove all rooms that don't happen within given building
+def filterByBuilding(rooms, building):
     newRooms = []
     for room in rooms:
         roomBuilding = room.name.split()
@@ -122,6 +114,7 @@ def sortByBuilding(rooms, building):
             newRooms.append(room)
     return newRooms
 
+#Sort based on score
 def sortRooms(rooms):
     rooms.sort(key=lambda x: x.score, reverse=True)
     
@@ -133,26 +126,3 @@ def getRooms():
     sortRooms(rooms)
 
     return rooms
-
-
-# def main():
-
-#     for room in rooms:
-#         print(f"Room: {room.name}")
-        #print(f"Score according to current time: {room.score}")
-
-        # for event in room.events:
-        #     print(f"  Course: {event['course']}, Section: {event['section_id']}, Type: {event['type']}")
-        #     print(f"    Time: {event['start']}-{event['end']}, Days: {event['dates']}")
-        #     print(index)
-        #     index += 1
-
-    # buildings = []
-    # for i in rooms:
-    #     building = i.name.split()
-    #     if len(building) > 0 and building[0] not in buildings:
-    #         buildings.append(building[0])
-    # print(buildings) 
-
-# if __name__ == "__main__":
-#     main()

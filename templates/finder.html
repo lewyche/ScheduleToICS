@@ -17,6 +17,7 @@
                 <h2>Filter by Building</h2>
                 <p>Current building: {{currBuilding}}</p>
                 <div class="building">
+                    <!-- Could probably do this using Jinja, but makes adding line breaks easier -->
                     <input autofocus name="building" type="submit" value="ROZH">
                     <input autofocus name="building" type="submit" value="MCKN">
                     <input autofocus name="building" type="submit" value="MAC">
@@ -64,7 +65,6 @@
                     <br>
                     <input name="time" type="time">
                     <input name="time" type="submit" value="Submit">
-                    
                     <br> 
                     <input autofocus name="reset" type="submit" value="Reset Time to Current">
                     <br>
@@ -75,6 +75,7 @@
                 <p>Created by Robert Yan</p>
                 <a href="https://github.com/lewyche/ScheduleToICS">https://github.com/lewyche/ScheduleToICS</a>    
             </div>
+            <!-- Class cards are here, code for cards is in app.py -->
             {% for room in htmlRooms %}
                 {{ room|safe }}
             {% endfor %}
