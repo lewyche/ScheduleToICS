@@ -52,10 +52,18 @@ def get_day_abbrev(weekday):
 #Rooms are scored based on the amount of minutes until the next event
 def scoreRoom(room, weekday, givenTime):
     foundSchedule = False
+    room.score = -1
     maxScore = 1440     #number of minutes in a day
+
+    if room.name == "ROZH 102":    
+        print(weekday)
+        for i in room.events:
+            print(i['dates'])
+        print(room.score)
 
     for i in room.events:
         if weekday in i['dates']:
+            foundSchedule = True
             #is event occuring during giventime
             if i['start'] <= givenTime <= i['end']:
                 foundSchedule = True
@@ -66,14 +74,14 @@ def scoreRoom(room, weekday, givenTime):
                 if room.score != -1:    #rooms should be scored by nearest occuring event
                     if newScore < room.score:   #if room has been scored by event occuring later
                         room.score = newScore
-                        foundSchedule = True
-
-                else:
+                elif room.score == -1:
                     room.score = newScore
-                    foundSchedule = True
-
-
+                foundSchedule = True   
+            if room.name == "ROZH 102":
+                print(room.score)
     if foundSchedule == False:   #No events occuring during this weekday
+        if room.name == "ROZH 102":
+            print("did not find")
         room.score = maxScore
 
 def scoreRoomsCurrTime(rooms):

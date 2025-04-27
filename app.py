@@ -77,15 +77,21 @@ def setHtmlRooms():
     rooms = getRooms()
     return getHtmlRooms(rooms)
 
-# currBuilding = ""
-# currWeekday = ""
-# currTime = ""
-# rooms = getRooms()
-# htmlRooms = getHtmlRooms(rooms)
 
 rooms = getRooms()
 currTime = ""
 currWeekday = ""
+
+def sortAndScoreRooms():
+    global rooms, currTime, currWeekday
+    hour = -1
+    minutes = -1
+    if currTime != "":
+        splitTime = currTime.split(":")
+        hour = int(splitTime[0])
+        minutes = int(splitTime[1])
+    scoreRoomsGivenTime(rooms=rooms, weekday=currWeekday, hour=hour, minutes=minutes)
+    sortRooms(rooms)
 
 @app.route("/finder", methods=["GET", "POST"])
 def finder():
@@ -101,30 +107,22 @@ def finder():
         if building != "No Building" and building != "":
             rooms = getRooms()
             rooms = sortByBuilding(rooms, building)
+            sortAndScoreRooms()
         elif building == "No Building":
             rooms = getRooms()
-
+            sortAndScoreRooms()        
+            
         if time != "":
-            print(time)
             currTime = time
-            splitTime = time.split(":")
-            hour = int(splitTime[0])
-            minutes = int(splitTime[1])
-            scoreRoomsGivenTime(rooms=rooms, weekday=currWeekday, hour=hour, minutes=minutes)
-            sortRooms(rooms)
+            sortAndScoreRooms()
         if weekday != "":
             currWeekday = weekday
-            hour = -1
-            minutes = -1
-            if currTime != "":
-                splitTime = currTime.split(":")
-                hour = int(splitTime[0])
-                minutes = int(splitTime[1])
-            scoreRoomsGivenTime(rooms=rooms, weekday=currWeekday, hour=hour, minutes=minutes)
-            sortRooms(rooms)
+            sortAndScoreRooms()
         if reset == "Reset Time to Current":
             scoreRoomsCurrTime(rooms)
             sortRooms(rooms)
+            currTime = ""
+            currWeekday = ""
         
 
     # global currBuilding, currWeekday, currTime, rooms, htmlRooms
