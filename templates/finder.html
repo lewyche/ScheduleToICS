@@ -15,67 +15,63 @@
             <form action="/finder" method="post">
                 <br>
                 <h2>Filter by Building</h2>
-                <div>
+                <p>Current building: {{currBuilding}}</p>
+                <div class="building">
                     <input autofocus name="building" type="submit" value="ROZH">
                     <input autofocus name="building" type="submit" value="MCKN">
                     <input autofocus name="building" type="submit" value="MAC">
                     <input autofocus name="building" type="submit" value="RICH">
-                    <br>
                     <input autofocus name="building" type="submit" value="THRN">
                     <input autofocus name="building" type="submit" value="MINS">
                     <input autofocus name="building" type="submit" value="MACN">
                     <input autofocus name="building" type="submit" value="MACS">
-                    <br>
                     <input autofocus name="building" type="submit" value="MCLN">
                     <input autofocus name="building" type="submit" value="ANNU">
                     <input autofocus name="building" type="submit" value="ALEX">
                     <input autofocus name="building" type="submit" value="CRSC">
-                    <br>
                     <input autofocus name="building" type="submit" value="GRHM">
                     <input autofocus name="building" type="submit" value="AD-S">
                     <input autofocus name="building" type="submit" value="LA">
-                    <input autofocus name="building" type="submit" value="WMEM">
                     <br>
+                    <input autofocus name="building" type="submit" value="WMEM">
                     <input autofocus name="building" type="submit" value="SSC">
                     <input autofocus name="building" type="submit" value="FSA">
                     <input autofocus name="building" type="submit" value="PAHL">
                     <input autofocus name="building" type="submit" value="OVCM">
-                    <br>
                     <input autofocus name="building" type="submit" value="ECLA">
                     <input autofocus name="building" type="submit" value="REYN">
                     <input autofocus name="building" type="submit" value="JTP">
                     <input autofocus name="building" type="submit" value="PAHL">
-                    <br>
                     <input autofocus name="building" type="submit" value="FS">
                     <input autofocus name="building" type="submit" value="CCLC">
                     <input autofocus name="building" type="submit" value="HUTT">
                     <input autofocus name="building" type="submit" value="BMED">
-                    <br>
                     <input autofocus name="building" type="submit" value="ZAV">
                     <input autofocus name="building" type="submit" value="MASS">
-                    <input autofocus name="building" type="submit" value="No Building">    
+                    <br>
+                    <input style="width:10%; height:30px; margin:5px;"autofocus name="building" type="submit" value="No Building">    
                 </div>
-                <br>
-                <h2>Filter by Time</h2>
-                <div>
-                    <input autofocus name="time" type="submit" value="M">
-                    <input autofocus name="time" type="submit" value="T">
-                    <input autofocus name="time" type="submit" value="W">
-                    <input autofocus name="time" type="submit" value="Th">
-                    <input autofocus name="time" type="submit" value="F">
-                    <input autofocus name="time" type="submit" value="S">
-                    <input autofocus name="time" type="submit" value="Su">
+                <div class="time">
+                    <h2>Filter by Time</h2>
+                    <p>Current Time: {{currWeekday}} {{currTime}}</p>    
+                    <input autofocus name="weekday" type="submit" value="M">
+                    <input autofocus name="weekday" type="submit" value="T">
+                    <input autofocus name="weekday" type="submit" value="W">
+                    <input autofocus name="weekday" type="submit" value="Th">
+                    <input autofocus name="weekday" type="submit" value="F">
+                    <input autofocus name="weekday" type="submit" value="S">
+                    <input autofocus name="weekday" type="submit" value="Su">
+                    <br>
+                    <input name="time" type="time">
+                    <input name="time" type="submit" value="Submit">
+                    
+                    <br> 
+                    <input autofocus name="reset" type="submit" value="Reset Time to Current">
                     <br>
                     <br>
-                    <input autocomplete="off" autofocus name="hour" placeholder="Enter Hour" type="text">   
-                    <input autocomplete="off" autofocus name="minutes" placeholder="Enter Minutes" type="text">                
-                                 
-                    <button type="submit">Submit</button>    
                 </div>
-
             </form>
-
-            <div>
+            <div class="credits">
                 <p>Created by Robert Yan</p>
                 <a href="https://github.com/lewyche/ScheduleToICS">https://github.com/lewyche/ScheduleToICS</a>    
             </div>

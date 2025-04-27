@@ -76,19 +76,35 @@ def scoreRoom(room, weekday, givenTime):
     if foundSchedule == False:   #No events occuring during this weekday
         room.score = maxScore
 
+def scoreRoomsCurrTime(rooms):
+    currtime = datetime.datetime.now()
+    time = currtime.hour * 60 + currtime.minute
+    weekday = get_day_abbrev(currtime.weekday())
+    for i in rooms:
+        scoreRoom(room=i, weekday=weekday, givenTime=time)
 
-def scoreRooms(rooms, givenTime):
-    if not givenTime: #time not given
-        currtime = datetime.datetime.now()
-        time = currtime.hour * 60 + currtime.minute
-        weekday = get_day_abbrev(givenTime.weekday())
-        for i in rooms:
-            scoreRoom(room=i, weekday=weekday, givenTime=time)
-    else:   
-        time = givenTime.hour * 60 + givenTime.minute
-        weekday = get_day_abbrev(givenTime.weekday())
-        for i in rooms:
-            scoreRoom(room=i, weekday=weekday, givenTime=time)
+def scoreRoomsGivenTime(rooms, weekday, hour, minutes):
+    currtime = datetime.datetime.now()
+
+    setWeekday = weekday
+    setHour = hour
+    setMinutes = minutes
+
+    if weekday == "":
+        setWeekday = currtime.weekday()
+
+    if hour == -1 or minutes == -1:
+        setHour = currtime.hour
+        setMinutes = currtime.minute
+
+    print(weekday)
+    print(hour)
+    print(minutes)
+
+    time = setHour * 60 + setMinutes
+
+    for i in rooms:
+        scoreRoom(room=i, weekday=setWeekday, givenTime=time)
 
 def sortByBuilding(rooms, building):
     newRooms = []
@@ -105,7 +121,7 @@ def getRooms():
     data = load_data('outputW25.json')
     rooms = process_data(data)
 
-    scoreRooms(rooms, datetime.datetime.now())
+    scoreRoomsCurrTime(rooms)
     sortRooms(rooms)
 
     return rooms
