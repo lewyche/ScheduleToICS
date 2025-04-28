@@ -1,0 +1,16 @@
+.room{
+    float: left;
+    border: outset;
+    border-width: 3px;
+    margin: 5px;
+    padding: 10px;
+}
+
+.building{
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+
+.credits{
+    display: block;
+}

@@ -1,11 +1,22 @@
 import json
 import re
+import datetime
 from flask import Flask, render_template, request, send_file
 
 from coursePlanner import initData
 from exportToCalendar import exportToIcal
 
+from extractRooms import getRooms, filterByBuilding, scoreRoomsGivenTime, scoreRoomsCurrTime, sortRooms, get_day_abbrev
+
 app = Flask(__name__)
+
+#Global variables for class finder
+
+rooms = getRooms()
+currTime = ""
+currWeekday = ""
+
+#Helper functions for Schedule Importer Page
 
 def reverseString(str):
     return str[::-1]
@@ -55,7 +66,75 @@ def index():
             result = "Input invalid, did you forget to include the section number?"
     return render_template("index.html", result=result)
 
+#Helper Functions for classroom finder page
 
-@app.route("/finder")
+def fillCard(room):
+    card = f"""<div class='room'>
+        <h2>{room.name}</h2>
+        <p>Minutes until next event: {room.score}</p>
+        </div>"""
+    return card
+
+#use room data to fill html cards
+def getHtmlRooms(rooms):
+    htmlRooms = []
+    for i in rooms:
+        if i.score > 0 and i.name != " ":
+            htmlRooms.append(fillCard(i))
+    return htmlRooms
+
+def sortAndScoreRooms():
+    global rooms, currTime, currWeekday
+    hour = -1
+    minutes = -1
+    if currTime != "":
+        splitTime = currTime.split(":")
+        hour = int(splitTime[0])
+        minutes = int(splitTime[1])
+    scoreRoomsGivenTime(rooms=rooms, weekday=currWeekday, hour=hour, minutes=minutes)
+    sortRooms(rooms)
+
+@app.route("/finder", methods=["GET", "POST"])
 def finder():
-    return render_template("finder.html")
+    global rooms, currTime, currWeekday
+
+    building = request.form.get("building", "")
+    time = request.form.get("time", "")
+    weekday = request.form.get("weekday", "")
+
+    reset = request.form.get("reset", "")
+
+    if request.method == "POST":
+
+        if building != "No Building" and building != "":
+            rooms = getRooms()
+            rooms = filterByBuilding(rooms, building)
+            sortAndScoreRooms()
+        elif building == "No Building":
+            rooms = getRooms()
+            sortAndScoreRooms()        
+            
+        if time != "":
+            currTime = time
+            sortAndScoreRooms()
+
+        if weekday != "":
+            currWeekday = weekday
+            sortAndScoreRooms()
+
+        if reset == "Reset Time to Current":
+            scoreRoomsCurrTime(rooms)
+            sortRooms(rooms)
+            currTime = ""
+            currWeekday = ""
+        
+    htmlRooms = getHtmlRooms(rooms)
+    displayTime = currTime
+    displayWeekday = currWeekday
+    if currTime == "":
+        displayTime = f"{datetime.datetime.now().hour}:{datetime.datetime.now().minute}"
+    if currWeekday == "":
+        displayWeekday = get_day_abbrev(datetime.datetime.now().weekday())
+    return render_template("finder.html", htmlRooms=htmlRooms,building=building, displayTime=displayTime, displayWeekday=displayWeekday)
+
+

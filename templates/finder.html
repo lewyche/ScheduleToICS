@@ -4,14 +4,81 @@
     <head>
         <meta name="viewport" content="inital-scale=1, width=device-width">
         <title>Study Spot Finder</title>
+        <link rel="stylesheet" href="../static/style.css">
     </head>
     <body>
         <div style="text-align: center">
             <h1>Study Spot Finder</h1>
             <a href="/">ScheduleToICS</a>
             <a href="/finder">Study Spot Finder</a>
-            <p>Created by Robert Yan</p>
-            <a href="https://github.com/lewyche/ScheduleToICS">https://github.com/lewyche/ScheduleToICS</a>
+
+            <form action="/finder" method="post">
+                <br>
+                <h2>Filter by Building</h2>
+                <p>Current building: {{building}}</p>
+                <div class="building">
+                    <!-- Could probably do this using Jinja, but this makes adding line breaks easier -->
+                    <input autofocus name="building" type="submit" value="ROZH">
+                    <input autofocus name="building" type="submit" value="MCKN">
+                    <input autofocus name="building" type="submit" value="MAC">
+                    <input autofocus name="building" type="submit" value="RICH">
+                    <input autofocus name="building" type="submit" value="THRN">
+                    <input autofocus name="building" type="submit" value="MINS">
+                    <input autofocus name="building" type="submit" value="MACN">
+                    <input autofocus name="building" type="submit" value="MACS">
+                    <input autofocus name="building" type="submit" value="MCLN">
+                    <input autofocus name="building" type="submit" value="ANNU">
+                    <input autofocus name="building" type="submit" value="ALEX">
+                    <input autofocus name="building" type="submit" value="CRSC">
+                    <input autofocus name="building" type="submit" value="GRHM">
+                    <input autofocus name="building" type="submit" value="AD-S">
+                    <input autofocus name="building" type="submit" value="LA">
+                    <br>
+                    <input autofocus name="building" type="submit" value="WMEM">
+                    <input autofocus name="building" type="submit" value="SSC">
+                    <input autofocus name="building" type="submit" value="FSA">
+                    <input autofocus name="building" type="submit" value="PAHL">
+                    <input autofocus name="building" type="submit" value="OVCM">
+                    <input autofocus name="building" type="submit" value="ECLA">
+                    <input autofocus name="building" type="submit" value="REYN">
+                    <input autofocus name="building" type="submit" value="JTP">
+                    <input autofocus name="building" type="submit" value="PAHL">
+                    <input autofocus name="building" type="submit" value="FS">
+                    <input autofocus name="building" type="submit" value="CCLC">
+                    <input autofocus name="building" type="submit" value="HUTT">
+                    <input autofocus name="building" type="submit" value="BMED">
+                    <input autofocus name="building" type="submit" value="ZAV">
+                    <input autofocus name="building" type="submit" value="MASS">
+                    <br>
+                    <input style="width:10%; height:30px; margin:5px;"autofocus name="building" type="submit" value="No Building">    
+                </div>
+                <div class="time">
+                    <h2>Filter by Time</h2>
+                    <p>Current Time: {{displayWeekday}} {{displayTime}}</p>    
+                    <input autofocus name="weekday" type="submit" value="M">
+                    <input autofocus name="weekday" type="submit" value="T">
+                    <input autofocus name="weekday" type="submit" value="W">
+                    <input autofocus name="weekday" type="submit" value="Th">
+                    <input autofocus name="weekday" type="submit" value="F">
+                    <input autofocus name="weekday" type="submit" value="S">
+                    <input autofocus name="weekday" type="submit" value="Su">
+                    <br>
+                    <input name="time" type="time">
+                    <input name="time" type="submit" value="Submit">
+                    <br> 
+                    <input autofocus name="reset" type="submit" value="Reset Time to Current">
+                    <br>
+                    <br>
+                </div>
+            </form>
+            <div class="credits">
+                <p>Created by Robert Yan</p>
+                <a href="https://github.com/lewyche/ScheduleToICS">https://github.com/lewyche/ScheduleToICS</a>    
+            </div>
+            <!-- Class cards are here, code for cards is in app.py -->
+            {% for room in htmlRooms %}
+                {{ room|safe }}
+            {% endfor %}
         </div>
 
 
