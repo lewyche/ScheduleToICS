@@ -18,7 +18,7 @@ def process_data(data):
         sections = course_info.get("Sections", [])
         for section in sections:
             section_id = section.get("id")
-            for activity_type in ["LEC","LAB","SEM"]:   #Rooms for Labs and Seminars are excluded, to add them just add "LAB" and "SEM"
+            for activity_type in ["LEC","LAB","SEM"]:
                 activity = section.get(activity_type)
                 if activity:
                     location = activity.get("location", "")

@@ -1,15 +1,16 @@
 import json
 import re
+import datetime
 from flask import Flask, render_template, request, send_file
 
 from coursePlanner import initData
 from exportToCalendar import exportToIcal
 
-from extractRooms import getRooms, filterByBuilding, scoreRoomsGivenTime, scoreRoomsCurrTime, sortRooms
+from extractRooms import getRooms, filterByBuilding, scoreRoomsGivenTime, scoreRoomsCurrTime, sortRooms, get_day_abbrev
 
 app = Flask(__name__)
 
-#==Global variables for class finder==
+#Global variables for class finder
 
 rooms = getRooms()
 currTime = ""
@@ -65,6 +66,8 @@ def index():
             result = "Input invalid, did you forget to include the section number?"
     return render_template("index.html", result=result)
 
+#Helper Functions for classroom finder page
+
 def fillCard(room):
     card = f"""<div class='room'>
         <h2>{room.name}</h2>
@@ -72,13 +75,11 @@ def fillCard(room):
         </div>"""
     return card
 
-#Helper Functions for classroom finder page
-
 #use room data to fill html cards
 def getHtmlRooms(rooms):
     htmlRooms = []
     for i in rooms:
-        if i.score > 0:
+        if i.score > 0 and i.name != " ":
             htmlRooms.append(fillCard(i))
     return htmlRooms
 
@@ -128,7 +129,12 @@ def finder():
             currWeekday = ""
         
     htmlRooms = getHtmlRooms(rooms)
-
-    return render_template("finder.html", htmlRooms=htmlRooms, currTime=currTime, currWeekday=currWeekday)
+    displayTime = currTime
+    displayWeekday = currWeekday
+    if currTime == "":
+        displayTime = f"{datetime.datetime.now().hour}:{datetime.datetime.now().minute}"
+    if currWeekday == "":
+        displayWeekday = get_day_abbrev(datetime.datetime.now().weekday())
+    return render_template("finder.html", htmlRooms=htmlRooms,building=building, displayTime=displayTime, displayWeekday=displayWeekday)
 
 

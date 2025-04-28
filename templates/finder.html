@@ -15,9 +15,9 @@
             <form action="/finder" method="post">
                 <br>
                 <h2>Filter by Building</h2>
-                <p>Current building: {{currBuilding}}</p>
+                <p>Current building: {{building}}</p>
                 <div class="building">
-                    <!-- Could probably do this using Jinja, but makes adding line breaks easier -->
+                    <!-- Could probably do this using Jinja, but this makes adding line breaks easier -->
                     <input autofocus name="building" type="submit" value="ROZH">
                     <input autofocus name="building" type="submit" value="MCKN">
                     <input autofocus name="building" type="submit" value="MAC">
@@ -54,7 +54,7 @@
                 </div>
                 <div class="time">
                     <h2>Filter by Time</h2>
-                    <p>Current Time: {{currWeekday}} {{currTime}}</p>    
+                    <p>Current Time: {{displayWeekday}} {{displayTime}}</p>    
                     <input autofocus name="weekday" type="submit" value="M">
                     <input autofocus name="weekday" type="submit" value="T">
                     <input autofocus name="weekday" type="submit" value="W">
