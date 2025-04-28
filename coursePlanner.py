@@ -8,7 +8,7 @@ from CourseUtil import ScheduleItem, CourseSection, CoursePlanner
 def initData(courses):
     course_codes = courses
     # Load the JSON file into a Python dictionary
-    with open('outputW25NoProfNoRooms.json', 'r') as file:
+    with open('outputW25.json', 'r') as file:
         data = json.load(file)
 
     allCourseData = []
