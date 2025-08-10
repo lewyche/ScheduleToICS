@@ -1,6 +1,8 @@
 import json
 import datetime
 
+from semesterSwitcher import getCourseData 
+
 class Room:
     def __init__(self, name):
         self.name = name
@@ -21,15 +23,15 @@ def process_data(data):
             for activity_type in ["LEC","LAB","SEM"]:
                 activity = section.get(activity_type)
                 if activity:
-                    location = activity.get("location", "")
+                    location = activity[0].get("location", "")
                     if location:
                         parts = location.split(', ')
                         room_name = parts[-1]
                     else:
                         continue  # Skip if no location
-                    start = activity.get("start")
-                    end = activity.get("end")
-                    dates = activity.get("date", [])
+                    start = activity[0].get("start")
+                    end = activity[0].get("end")
+                    dates = activity[0].get("date", [])
                     
                     event = {
                         "course": course_code,
@@ -119,10 +121,11 @@ def sortRooms(rooms):
     rooms.sort(key=lambda x: x.score, reverse=True)
     
 def getRooms():
-    data = load_data('outputW25.json')
+    data = load_data(getCourseData())
     rooms = process_data(data)
 
     scoreRoomsCurrTime(rooms)
     sortRooms(rooms)
+    rooms = []
 
     return rooms

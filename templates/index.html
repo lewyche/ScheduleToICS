@@ -7,7 +7,7 @@
     </head>
     <body>
         <div style="text-align: center">
-            <h1>Course Schedule to .ics W25</h1>
+            <h1>Course Schedule to .ics</h1>
             <a href="/">ScheduleToICS</a>
             <a href="/finder">Study Spot Finder</a>
             <h3>Enter courses seperated with commas or spaces</h3>
@@ -15,10 +15,15 @@
             
             <p>{{result}}</p>
             
+            <h3>CURR SEMESTER: {{semester}}</h3>
+
             <form action="/" method="post">
+                <input style="height:25px;width: 100px" autofocus name="semester" type="submit" value="WINTER">
+                <input style="height:25px;width: 100px" autofocus name="semester" type="submit" value="FALL">
+                <br><br>    
                 <input size="100" style="height:100px" autocomplete="off" autofocus name="courses" placeholder="Enter Courses" type="text">
                 <br>
-                <button style="height:50px;width:825px"type="submit">Submit</button>
+                <input style="height:50px;width:825px"name="submit_button" type="submit" value="submit">
             </form>
             <p>Created by Robert Yan</p>
             <a href="https://github.com/lewyche/ScheduleToICS">https://github.com/lewyche/ScheduleToICS</a>

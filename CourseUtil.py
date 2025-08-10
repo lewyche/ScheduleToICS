@@ -2,6 +2,10 @@ import itertools
 
 #Code from https://github.com/AlphaCloudX/Schedule-Optimizer
 
+def clockToMinutes(clock):
+    h, m = map(int, clock.split(":"))
+    return h * 60 + m
+
 class ScheduleItem:
     """
     Object to store information for a schedule item (Lecture, Seminar, or Lab)
@@ -9,8 +13,8 @@ class ScheduleItem:
 
     def __init__(self, item_type, start, finish, days):
         self.item_type = item_type  # Can be 'Lecture', 'Seminar', or 'Lab'
-        self.start = start
-        self.finish = finish
+        self.start = clockToMinutes(start)
+        self.finish = clockToMinutes(finish)
         self.days = days
 
     def __str__(self):

@@ -2,6 +2,8 @@ from icalendar import Calendar, Event, vDatetime
 from datetime import datetime
 import zoneinfo
 
+from semesterSwitcher import getCourseData
+
 #Code from https://github.com/AlphaCloudX/Schedule-Optimizer
 
 def exportToIcal(courses, allCourseData):
@@ -35,8 +37,18 @@ def addScheduleItem(courseCode, item, cal):
         newEvent.add('dtstart', getScheduleItemDateTime(item, item.start, i))
         #end of the event
         newEvent.add('dtend', getScheduleItemDateTime(item, item.finish, i))
-        #reoccur every week until the last day of class: April 4, 2025
-        lastDay = datetime(2025,4,4,0,0,0,0,tzinfo=zoneinfo.ZoneInfo("America/New_York"))
+        
+        lastDay = datetime()
+        #reoccur every week until the last day of class
+        #winter 2025
+        if getCourseData() == "W26_round2.json":
+            #Last day Nov, 28th
+            lastDay = datetime(2025,11,29,0,0,0,0,tzinfo=zoneinfo.ZoneInfo("America/New_York"))
+        #fall 2026
+        else:   
+            #Last day April 6th
+            lastDay = datetime(2026,4,7,0,0,0,0,tzinfo=zoneinfo.ZoneInfo("America/New_York"))
+        
         newEvent.add('rrule', {'freq': 'weekly', 'until': lastDay})
         #add event to calendar
         cal.add_component(newEvent)

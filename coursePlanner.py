@@ -3,12 +3,15 @@ import json
 
 from CourseUtil import ScheduleItem, CourseSection, CoursePlanner
 
+from semesterSwitcher import getCourseData 
+
 #Code from https://github.com/AlphaCloudX/Schedule-Optimizer
+
 
 def initData(courses):
     course_codes = courses
     # Load the JSON file into a Python dictionary
-    with open('outputW25.json', 'r') as file:
+    with open(getCourseData(), 'r') as file:
         data = json.load(file)
 
     allCourseData = []
@@ -28,17 +31,17 @@ def initData(courses):
 
             for sec in cData:
                 try:
-                    lectureTime = ScheduleItem("Lecture", sec["LEC"]["start"], sec["LEC"]["end"], sec["LEC"]["date"])
+                    lectureTime = ScheduleItem("Lecture", sec["LEC"][0]["start"], sec["LEC"][0]["end"], sec["LEC"][0]["date"])
                 except KeyError:
                     lectureTime = None
 
                 try:
-                    semTime = ScheduleItem("Seminar", sec["SEM"]["start"], sec["SEM"]["end"], sec["SEM"]["date"])
+                    semTime = ScheduleItem("Seminar", sec["SEM"][0]["start"], sec["SEM"][0]["end"], sec["SEM"][0]["date"])
                 except KeyError:
                     semTime = None
 
                 try:
-                    labTime = ScheduleItem("Lab", sec["LAB"]["start"], sec["LAB"]["end"], sec["LAB"]["date"])
+                    labTime = ScheduleItem("Lab", sec["LAB"][0]["start"], sec["LAB"][0]["end"], sec["LAB"][0]["date"])
                 except KeyError:
                     labTime = None
 

@@ -1,14 +1,17 @@
 import json
 import re
 import datetime
-from flask import Flask, render_template, request, send_file
+from flask import Flask, render_template, request, send_file, flash
 
 from coursePlanner import initData
 from exportToCalendar import exportToIcal
 
 from extractRooms import getRooms, filterByBuilding, scoreRoomsGivenTime, scoreRoomsCurrTime, sortRooms, get_day_abbrev
 
+from semesterSwitcher import getCourseData, setCourseData
+
 app = Flask(__name__)
+app.secret_key = "CHANGE_ME_LATER"
 
 #Global variables for class finder
 
@@ -34,7 +37,7 @@ def getCoursesName(courses):
 #ensure that user entered courses are present in the json file
 def validateCourses(courses):
     courseList = parseCourses(courses)
-    with open('outputW25NoProfNoRooms.json', 'r') as file:
+    with open(getCourseData(), 'r') as file:
         data = json.load(file)
     
     for i in courseList:
@@ -52,10 +55,12 @@ def parseCourses(courses):
 
 @app.route("/", methods=["GET", "POST"])
 def index():
+    button_pressed = request.form.get("submit_button", "")
     courses = request.form.get("courses", "")
+    semester = request.form.get("semester", "")
     result = ""
     if request.method == "POST":
-        if validateCourses(courses):
+        if validateCourses(courses) and button_pressed == "submit":
             courseList = parseCourses(courses)
             courseNames = getCoursesName(courseList)
             allCourseData = initData(courseNames)    
@@ -64,7 +69,22 @@ def index():
             return send_file("coursePlan.ics", as_attachment=True)
         else:
             result = "Input invalid, did you forget to include the section number?"
-    return render_template("index.html", result=result)
+            setCourseData('W26_round2.json')    #bad input causes display to change back into winter, change internals to match
+
+        if semester == "WINTER":
+            setCourseData('W26_round2.json')
+            result = ""
+        elif semester == "FALL":
+            setCourseData('F25_round2.json')
+            result = ""
+            print(getCourseData())
+
+    if semester == "":
+        curr_semester = "WINTER"
+    else:
+        curr_semester = semester
+
+    return render_template("index.html", result=result, semester=curr_semester)
 
 #Helper Functions for classroom finder page
 
