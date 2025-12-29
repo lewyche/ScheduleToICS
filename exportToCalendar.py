@@ -2,6 +2,8 @@ from icalendar import Calendar, Event, vDatetime
 from datetime import datetime
 import zoneinfo
 
+from courseOutlineParser import courseOutlineParser
+
 #Code from https://github.com/AlphaCloudX/Schedule-Optimizer
 
 def exportToIcal(courses, allCourseData):
@@ -60,3 +62,13 @@ def getFirstDay(day):
     else:
         print("getFirstDay(): invaild weekday")
         return 0
+    
+def addEventsToCalWithOnlyDates(courses: list[courseOutlineParser]):
+    newCal = Calendar()
+    for course in courses:
+        course.formatDates(newCal)
+
+    newIcs = open("courseImportantDates.ics", 'wb+')
+    newIcs.write(newCal.to_ical())
+    print("Calendar exported.")
+    newIcs.close()

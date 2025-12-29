@@ -1,12 +1,14 @@
 import json
 import re
 import datetime
-from flask import Flask, render_template, request, send_file
+from flask import Flask, abort, render_template, request, send_file
 
 from coursePlanner import initData
-from exportToCalendar import exportToIcal
+from exportToCalendar import exportToIcal, addEventsToCalWithOnlyDates
 
 from extractRooms import getRooms, filterByBuilding, scoreRoomsGivenTime, scoreRoomsCurrTime, sortRooms, get_day_abbrev
+
+from courseOutlineParser import courseOutlineParser
 
 app = Flask(__name__)
 
@@ -137,4 +139,22 @@ def finder():
         displayWeekday = get_day_abbrev(datetime.datetime.now().weekday())
     return render_template("finder.html", htmlRooms=htmlRooms,building=building, displayTime=displayTime, displayWeekday=displayWeekday)
 
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  #Safety limit files 16mb
+@app.route("/outlineParser", methods=["GET", "POST"])
+def outlineParser():
+    if request.method == "POST":
+        print("Request received")
+        courseCodes = request.form.getlist("courseCode")
+        files = request.files.getlist("outlinePDF")
+        courses: list[courseOutlineParser] = []
 
+        for courseCode, file in zip(courseCodes, files): # add robust way to check against malicious file upload, curently using html
+            groups = courseOutlineParser(file, courseCode).parseKeyDateGroups()
+            courses.append(groups)
+        
+        addEventsToCalWithOnlyDates(courses)
+        print("Courses processed and calendar exported.")
+
+        return send_file("courseImportantDates.ics", as_attachment=True)
+
+    return render_template("outlineParser.html")
