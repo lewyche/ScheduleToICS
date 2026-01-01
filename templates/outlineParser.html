@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Test/Quiz Date Extractor (experimental)</title>
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+
+    <div style="text-align: center">
+        <h1>Test and Quiz Date Extractor (experimental)</h1>
+        <a href="/">Home</a>
+        <a href="/finder">Study Spot Finder</a>
+        <a href="/outlineParser">Test and Quiz Date Extractor (experimental)</a>
+        <p>Upload course outlines to extract test and quiz dates</p>
+    </div>
+
+    <form action="/outlineParser" method="post" enctype="multipart/form-data" id="outlineFiles">
+        <div id="classes-container">
+             <!-- user prompted courses entered, maybe make it auto sync with courses added from main page with cookie-->
+        </div>
+        
+        <button type="button" id="add-class-btn">Add New Class</button>
+        <br>
+        <button type="submit" id="submit-btn">Submit All</button>
+    </form>
+
+    <!-- add class entries as user requests -->
+    <script>
+        let classCounter = 0;
+
+        function addClassEntry() {
+            classCounter++;
+            const container = document.getElementById('classes-container');
+            const classEntry = document.createElement('div');
+            classEntry.className = 'class-entry';
+            classEntry.id = `class-${classCounter}`;
+            
+            classEntry.innerHTML = `
+                <label>Course Code:</label>
+                <input type="text" name="courseCode" placeholder="e.g., CIS*2250" required>
+                <label>Choose File:</label>
+                <input type="file" name="outlinePDF" accept=".pdf" required>
+                <button type="button" class="remove-btn" onclick="removeClassEntry('class-${classCounter}')">Remove</button>
+            `;
+            
+            container.appendChild(classEntry);
+        }
+
+        function removeClassEntry(classId) {
+            const element = document.getElementById(classId);
+            if (element) {
+                element.remove();
+            }
+        }
+
+        // Add first class entry on page load
+        document.addEventListener('DOMContentLoaded', function() { addClassEntry(); });
+
+        // Add class entry when button is clicked
+        document.getElementById('add-class-btn').addEventListener('click', addClassEntry);
+    </script>
+
+</body>
+</html>
